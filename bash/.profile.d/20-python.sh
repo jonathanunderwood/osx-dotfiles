@@ -2,6 +2,11 @@
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Projects
 
+# Setup pyenv for managing python versions
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+
 # Find the latest python
 if command -v python3 > /dev/null 2>&1 ; then
     python=$(command -v python3)
