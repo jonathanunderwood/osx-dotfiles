@@ -73,3 +73,5 @@ brew "poetry"
 brew "pyenv"
 cask "cameracontroller"
 brew "starship"
+brew "openblas"  # needed for building numpy wheels when not available on PyPi
+brew "ripgrep"
