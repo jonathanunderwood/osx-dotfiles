@@ -52,22 +52,27 @@ function poetry_venv_setup_dev_tools {
 }
 
 function setup_jupyter {
-    pip install jupyter notebook jupyter_contrib_nbextensions
+    poetry run pip install jupyter notebook jupyter_contrib_nbextensions
     # Enable extensions. The --sys-prefix ensures that the extensions are
     # configured in the current virtualenv rather than at a system level (which
     # is what happens without this option).
-    jupyter contrib nbextension install --sys-prefix
+    poetry run jupyter contrib nbextension install --sys-prefix
     # Extensions to enable. Note to list what is enabled, run:
     # jupyter nbextension list
-    jupyter nbextension enable --sys-prefix collapsible_headings/main
+    poetry run jupyter nbextension enable --sys-prefix collapsible_headings/main
 
-    pip install autopep8
-    jupyter nbextension enable --sys-prefix code_prettify/autopep8
+    poetry run pip install autopep8
+    poetry run jupyter nbextension enable --sys-prefix code_prettify/autopep8
 
-    pip install yapf
-    jupyter nbextension enable --sys-prefix code_prettify/code_prettify
+    poetry run pip install yapf
+    poetry run jupyter nbextension enable --sys-prefix code_prettify/code_prettify
     # Don't enable lux for now - it's very buggy
     # pip install lux-api
     # jupyter nbextension install --py luxwidget
     # jupyter nbextension enable --py luxwidget
+}
+
+function setup_python_devtools {
+    poetry add --dev black isort pylint flake8
+    poetry run pip install pyright autoflake importmagic epc
 }
