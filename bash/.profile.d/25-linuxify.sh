@@ -89,6 +89,9 @@ if ! command -v brew > /dev/null 2>&1 ; then
     return 0
 fi
 
+# Many of the commands below could use brew --prefix <pkg> directly, and that
+# would be more robust to package changes. But, to speed things up, we call brew
+# --prefix once and store the path.
 brew_path="$(brew --prefix)"
 
 # List of packages which install their un-prefixed binaries outside of the PATH.
@@ -152,12 +155,21 @@ done
 # package, and if it's found add the library to LDFLAGS and CPPFLAGS. That would
 # save the hassle of maintaining the list manually.
 brew_libs=(
-    openssl
-    sqlite
+    "openssl"
+    "sqlite"
+    "openblas"
 )
 
 for pkg in "${brew_libs[@]}"; do
-    env_prepend_dir LDFLAGS "$brew_path/opt/$pkg/lib" " " "-L"
-    env_prepend_dir CPPFLAGS "$brew_path/opt/$pkg/include" " " "-I"
-    env_prepend_file PKG_CONFIG_PATH "$brew_path/opt/$pkg/lib/pkgconfig"
+    if [[ -d "$brew_path/opt/$pkg" ]]; then
+        env_prepend_dir LDFLAGS "$brew_path/opt/$pkg/lib" " " "-L"
+        env_prepend_dir CPPFLAGS "$brew_path/opt/$pkg/include" " " "-I"
+        env_prepend_file PKG_CONFIG_PATH "$brew_path/opt/$pkg/lib/pkgconfig"
+    fi
 done
+
+# To build numpy wheels, the OPENBLAS environment variable needs to be set.
+# See: https://github.com/numpy/numpy/issues/17807
+if [[ -d "$brew_path/opt/openblas" ]]; then
+    export OPENBLAS="$brew_path/opt/openblas"
+fi
