@@ -2,10 +2,23 @@
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/Projects
 
-# Setup pyenv for managing python versions
-if command -v pyenv 1>/dev/null 2>&1; then
-    eval "$(pyenv init -)"
-fi
+# # Setup pyenv for managing python versions
+# if command -v pyenv 1>/dev/null 2>&1; then
+#     export PYENV_ROOT="$HOME/.pyenv"
+#     export PATH="$PYENV_ROOT/bin:$PATH"
+#     eval "$(pyenv init -)"
+# fi
+
+# # Setup pyenv to use the Homebrew installed python packages.
+# # See: https://stackoverflow.com/questions/30499795/how-can-i-make-homebrews-python-and-pyenv-live-together
+# rm -f "$HOME/.pyenv/versions/*-brew"
+# for i in $(brew --cellar)/python* ; do
+#     for p in "$i"/*; do
+#         # echo $p
+#         ln -s -f "$p" "$HOME/.pyenv/versions/${p##/*/}-brew"
+#     done
+# done
+# pyenv rehash
 
 # Find the latest python
 if command -v python3 > /dev/null 2>&1 ; then
