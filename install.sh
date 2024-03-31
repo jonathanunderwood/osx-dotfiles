@@ -3,6 +3,7 @@
 # Use GNU stow to install symlinks to the configurations.
 configs=(
     bash
+    spacemacs
     ssh
 )
 
