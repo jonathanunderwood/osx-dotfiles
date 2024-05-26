@@ -2,6 +2,7 @@
 function spacemacs_update {
     # Update spacemacs and elisp packages. The package update command is ran
     # twice to ensure packages are unpacked and compiled.
+
     printf "Updating spacemacs:\n"
     git -C ~/.emacs.d/ pull || { printf "Failed to update spacemacs\n" ; exit 1 ; }
     printf "Spacemacs updated.\n\n"
