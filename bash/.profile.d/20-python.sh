@@ -31,6 +31,19 @@ else
     return 0
 fi
 
+# Setup TLS/SSL. OSX stores CAs in its Keychain, which is not available to
+# Homebrew installed Python versions. OpenSSL, when it is installed by Homebrew,
+# creates on on-disk CA store, and so we need to use that. We use certifi to set
+# this up.
+CA_BUNDLE=$(python3 -m certifi)
+if [[ "$?" = 0 ]] ; then
+    export SSL_CERT_FILE="$CA_BUNDLE"
+    export REQUESTS_CA_BUNDLE="$CA_BUNDLE"
+    export UV_NATIVE_TLS=true
+else
+    printf "%s\n" "Failed to set up SSL/TLS CA certificate store"
+fi
+
 # Don't do this: it will override what the virtualenv activate script does to
 # put the virtualenv python at the start of the path when the virtualenv is
 # activated.
@@ -86,6 +99,15 @@ function setup_jupyter {
 }
 
 function setup_python_devtools {
-    poetry add --dev black isort pylint flake8
+    # poetry add --dev black isort pylint flake8
     poetry run pip install pyright autoflake importmagic epc
 }
+
+# function setup_pypi_mirror {
+#     username=$1
+#     password=$2
+#     url=$3
+
+#     pip3 config --user set global.index
+
+# }
